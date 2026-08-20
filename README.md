@@ -1,7 +1,7 @@
 # Infinite Context (ICX) — Persistent Memory MCP Server
 
 [![MCP Registry](https://img.shields.io/badge/MCP-Registry_Indexed-blue.svg)](https://registry.modelcontextprotocol.io)
-[![smithery badge](https://smithery.ai/badge/calera-labs/infinite-context)](https://smithery.ai/servers/calera-labs/infinite-context)
+[![smithery badge](https://smithery.ai/badge/calera-labs/icx-mcp)](https://smithery.ai/servers/calera-labs/icx-mcp)
 [![Glama MCP](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp/badge)](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 [![RULER Score](https://img.shields.io/badge/RULER_MRCR_v2-96.28%25_(466%2F484)-emerald.svg)](https://icx.caleralabs.com/paper)
@@ -76,13 +76,13 @@ Install automatically across Claude, Cursor, or VS Code using Smithery:
 
 ```bash
 # For Claude Desktop
-npx -y @smithery/cli install infinite-context-mcp --client claude
+npx -y @smithery/cli install @calera-labs/icx-mcp --client claude
 
 # For Cursor IDE
-npx -y @smithery/cli install infinite-context-mcp --client cursor
+npx -y @smithery/cli install @calera-labs/icx-mcp --client cursor
 
 # For VS Code
-npx -y @smithery/cli install infinite-context-mcp --client vscode
+npx -y @smithery/cli install @calera-labs/icx-mcp --client vscode
 ```
 
 ---
