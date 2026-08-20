@@ -67,7 +67,7 @@ tools:
   - name: icx_remember
     version: 1.0.0
     description: >-
-      Stores text, documents, code snippets, or conversational facts into long-term persistent memory for later retrieval across sessions. Ingests content into topological memory nodes with zero context window decay. Use this tool whenever you need to save facts, contracts, documentation, or user details for future reference. Do not use for querying existing memory (use icx_recall_scoped or icx_search_facts instead). Ingestion is additive and non-destructive.
+      Stores text documents, code snippets, architectural decisions, and factual knowledge into persistent long-term memory partitioned by space_id. Use this tool when saving important facts, project conventions, API keys, user preferences, or documentation for future sessions. Do NOT use for retrieving stored memory (use icx_recall_scoped for semantic QA, icx_search_facts for keyword lookup, or icx_quote_slot for verbatim quotes). Ingestion is additive and non-destructive: creates new memory nodes without overwriting or mutating existing records. Requires X-License-Key authentication.
     annotations:
       title: Memorize Document or Fact
       readOnlyHint: false
@@ -76,16 +76,16 @@ tools:
       properties:
         text:
           type: string
-          description: The raw text, markdown document, code file, or factual statement to memorize.
+          description: The raw text, markdown document, code file, or factual statement to memorize (max ~500KB per call).
         space_id:
           type: string
-          description: Optional memory space partition (e.g. 'codebase_docs', 'contracts_v2', 'user_preferences'). Defaults to caller default space.
+          description: Optional memory space partition (e.g. 'default', 'codebase_docs', 'contracts_v2', 'user_preferences'). Defaults to 'default'.
         filename:
           type: string
           description: Optional filename or document title provenance tag (e.g. 'architecture.md', 'master_agreement.pdf') to track document origin.
         family:
           type: string
-          description: Optional document family grouping for deterministic verbatim register quoting (e.g. 'contract.indemnity', 'auth.tokens').
+          description: Optional document family grouping for deterministic verbatim register quoting (e.g. 'contract.indemnity', 'auth.tokens'). When set, allows verbatim retrieval via icx_quote_slot.
       required:
         - text
     outputSchema:
@@ -127,7 +127,7 @@ tools:
   - name: icx_recall_scoped
     version: 1.0.0
     description: >-
-      Performs associative semantic recall across long-term memory to retrieve grounded facts, citations, and source documents matching a natural language question. Use this tool when answering questions about previously saved documents or facts (e.g. 'What is the pricing tier?', 'Who is the lead architect?'). If you only need raw keyword matching across entity names, use icx_search_facts instead. For character-exact verbatim quotes of stored documents, use icx_quote_slot. Read-only with no side effects.
+      Performs semantic search across persistent long-term memory to retrieve grounded facts, relevant citations, and source documents matching a natural language question. Use this tool when answering questions about previously saved project specifications, codebase decisions, user preferences, or documents. Do NOT use for saving new facts (use icx_remember), do NOT use for raw keyword lookup (use icx_search_facts), and do NOT use for exact character-for-character verbatim quotes (use icx_quote_slot). Read-only operation with zero side effects. Requires X-License-Key authentication.
     annotations:
       title: Scoped Memory Recall
       readOnlyHint: true
@@ -136,10 +136,10 @@ tools:
       properties:
         query:
           type: string
-          description: Natural language question, keyword, or concept to recall from persistent lattice memory.
+          description: Natural language question, concept, or search prompt to recall relevant facts for.
         space_id:
           type: string
-          description: Optional memory space partition to restrict recall to. Defaults to caller default space.
+          description: Optional memory space partition to restrict recall to (e.g. 'default', 'codebase_docs'). Defaults to caller default space.
         top_k:
           type: number
           description: Maximum number of grounded facts to retrieve (default: 10, min: 1, max: 50).
@@ -179,7 +179,7 @@ tools:
   - name: icx_search_facts
     version: 1.0.0
     description: >-
-      Searches memory lattice nodes and decoded facts by keyword overlap and proximity across the active memory space. Use this tool for entity exploration or keyword discovery. For natural language question answering with grounded factual citations, use icx_recall_scoped instead. Read-only with no side effects.
+      Performs keyword and token search across persistent memory to discover entities, names, and matching terms within a memory space. Use this tool for entity exploration, keyword discovery, and locating specific identifiers or variables in memory. Do NOT use for answering natural language questions (use icx_recall_scoped), and do NOT use for writing data (use icx_remember). Read-only operation with zero side effects. Requires X-License-Key authentication.
     annotations:
       title: Search Simplicial Lattice Facts
       readOnlyHint: true
@@ -188,7 +188,7 @@ tools:
       properties:
         query:
           type: string
-          description: Search terms or entity names to search across memory nodes.
+          description: Search keywords, entity names, or token substrings to look up across memory nodes.
         space_id:
           type: string
           description: Optional memory space partition to search within. Defaults to caller default space.
@@ -231,7 +231,7 @@ tools:
   - name: icx_quote_slot
     version: 1.0.0
     description: >-
-      Retrieves exact character-for-character verbatim text quotes from stored document registers by document family and ordinal slot index. Use this tool when exact contractual wording, legal clauses, or code revisions must be quoted without AI paraphrasing. Use icx_recall_scoped for semantic QA instead. Read-only with no side effects.
+      Retrieves exact character-for-character verbatim text and cryptographic SHA-256 hashes from document registers by document family and 1-based slot index without AI paraphrasing. Use this tool when exact contractual wording, statutory clauses, license keys, or immutable code revisions must be quoted verbatim without AI modification. Do NOT use for semantic question answering (use icx_recall_scoped), and do NOT use for keyword exploration (use icx_search_facts). Read-only operation with zero side effects. Requires X-License-Key authentication.
     annotations:
       title: Verbatim Register Quoting
       readOnlyHint: true
@@ -240,10 +240,10 @@ tools:
       properties:
         family:
           type: string
-          description: Document family identifier (e.g. 'contract.indemnity', 'msa.pricing').
+          description: Document family identifier specified during ingestion (e.g. 'contract.indemnity', 'msa.pricing', 'auth.tokens').
         index:
           type: number
-          description: 1-based ordinal member index (e.g. 1 for first revision, 2 for second revision).
+          description: 1-based ordinal member index (e.g. 1 for first revision, 2 for second revision). Minimum: 1.
         space_id:
           type: string
           description: Optional memory space partition where the family was stored. Defaults to caller default space.
@@ -286,7 +286,7 @@ tools:
   - name: icx_inspect_space
     version: 1.0.0
     description: >-
-      Audits and retrieves real-time telemetry for a partitioned memory space (active node count, total synapses, grounded facts count, memory state, and contradiction alarms). Use this tool to monitor memory health, verify ingestion, or inspect space capacity. Read-only with no side effects.
+      Audits and returns real-time diagnostic telemetry for a partitioned memory space, including active node counts, total synapses, grounded facts, memory state, and contradiction alarms. Use this tool to monitor memory partition health, verify document ingestion, check storage capacity, or detect contradiction alarms in a space. Do NOT use for querying memory content (use icx_recall_scoped or icx_quote_slot). Read-only operation with zero side effects. Requires X-License-Key authentication.
     annotations:
       title: Inspect Memory Space Telemetry
       readOnlyHint: true
@@ -295,7 +295,8 @@ tools:
       properties:
         space_id:
           type: string
-          description: Optional memory space partition to inspect. Defaults to caller default space.
+          description: Optional memory space partition to inspect. Defaults to caller default space ('default').
+      required: []
     outputSchema:
       type: object
       properties:
@@ -332,7 +333,7 @@ tools:
   - name: icx_reset_session
     version: 1.0.0
     description: >-
-      Resets conversational dialogue history for a session while strictly preserving all underlying crystallized knowledge, learned facts, and document weights in the memory space. Use when starting a new conversation topic while retaining all learned knowledge. Mutates session dialogue state but leaves persistent memory intact.
+      Clears conversational dialogue turn history for a session while strictly preserving all underlying persistent memory, learned facts, and document registers in the memory space. Use this tool when switching conversation topics or clearing dialogue context between independent tasks while retaining stored knowledge. Do NOT use for wiping persistent memory (persistent memory is preserved by design). Mutates session turn state but leaves long-term memory intact. Requires X-License-Key authentication.
     annotations:
       title: Reset Conversation History
       readOnlyHint: false
@@ -341,7 +342,8 @@ tools:
       properties:
         space_id:
           type: string
-          description: Optional memory space partition whose turn history should be reset. Defaults to caller default space.
+          description: Optional memory space partition whose ephemeral session dialogue history should be reset. Defaults to caller default space.
+      required: []
     outputSchema:
       type: object
       properties:
