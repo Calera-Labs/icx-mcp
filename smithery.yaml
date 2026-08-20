@@ -3,7 +3,7 @@
 
 name: icx-mcp
 title: Calera Infinite Context (ICX) — Persistent Memory
-description: Persistent epistemic memory and sub-5ms associative recall on the Volumetric Lattice Network for AI agents and LLMs with zero context decay.
+description: Persistent long-term memory and sub-5ms associative recall for AI agents and LLMs with zero context window decay.
 homepage: https://icx.caleralabs.com/mcp
 icon: https://caleralabs.com/assets/calera-labs-logo.svg
 license: Apache-2.0
@@ -65,9 +65,9 @@ config:
 # Certified 6-Tool Surface Area with Input & Output Schemas
 tools:
   - name: icx_remember
-    version: 0.4.0
+    version: 1.0.0
     description: >-
-      Ingests text, documents, code snippets, or conversational facts directly into the Volumetric Lattice Network memory manifold. Automatically forms simplicial pathways with sub-5ms crystallization and zero context window decay.
+      Stores text, documents, code snippets, or conversational facts into long-term persistent memory for later retrieval across sessions. Ingests content into topological memory nodes with zero context window decay. Use this tool whenever you need to save facts, contracts, documentation, or user details for future reference. Do not use for querying existing memory (use icx_recall_scoped or icx_search_facts instead). Ingestion is additive and non-destructive.
     annotations:
       title: Memorize Document or Fact
       readOnlyHint: false
@@ -79,10 +79,10 @@ tools:
           description: The raw text, markdown document, code file, or factual statement to memorize.
         space_id:
           type: string
-          description: Optional memory space partition (e.g. 'codebase_docs', 'contracts_v2', 'user_preferences'). Defaults to caller's default space.
+          description: Optional memory space partition (e.g. 'codebase_docs', 'contracts_v2', 'user_preferences'). Defaults to caller default space.
         filename:
           type: string
-          description: Optional filename or document title provenance tag (e.g. 'architecture.md', 'master_service_agreement.pdf').
+          description: Optional filename or document title provenance tag (e.g. 'architecture.md', 'master_agreement.pdf') to track document origin.
         family:
           type: string
           description: Optional document family grouping for deterministic verbatim register quoting (e.g. 'contract.indemnity', 'auth.tokens').
@@ -115,11 +115,19 @@ tools:
         persisted_state:
           type: string
           description: Storage layer provenance
+      required:
+        - status
+        - space_id
+        - filename
+        - learned_facts
+        - active_nodes
+        - bytes_ingested
+        - persisted_state
 
   - name: icx_recall_scoped
-    version: 0.4.0
+    version: 1.0.0
     description: >-
-      Performs geodesic associative recall across the Volumetric Lattice Network to retrieve exact Grounded Facts, citations, and provenance records without needle loss or context compression.
+      Performs associative semantic recall across long-term memory to retrieve grounded facts, citations, and source documents matching a natural language question. Use this tool when answering questions about previously saved documents or facts (e.g. 'What is the pricing tier?', 'Who is the lead architect?'). If you only need raw keyword matching across entity names, use icx_search_facts instead. For character-exact verbatim quotes of stored documents, use icx_quote_slot. Read-only with no side effects.
     annotations:
       title: Scoped Memory Recall
       readOnlyHint: true
@@ -131,10 +139,10 @@ tools:
           description: Natural language question, keyword, or concept to recall from persistent lattice memory.
         space_id:
           type: string
-          description: Optional memory space partition to restrict recall to.
+          description: Optional memory space partition to restrict recall to. Defaults to caller default space.
         top_k:
           type: number
-          description: Maximum number of grounded facts to retrieve (default: 10, max: 50).
+          description: Maximum number of grounded facts to retrieve (default: 10, min: 1, max: 50).
       required:
         - query
     outputSchema:
@@ -155,14 +163,23 @@ tools:
         facts:
           type: array
           description: List of recalled grounded facts and citations
+          items:
+            type: object
         total_in_space:
           type: integer
           description: Total nodes in active memory space
+      required:
+        - status
+        - query
+        - space_id
+        - count
+        - facts
+        - total_in_space
 
   - name: icx_search_facts
-    version: 0.4.0
+    version: 1.0.0
     description: >-
-      Searches simplicial lattice nodes and decoded facts by partial query overlap and manifold proximity across the active memory space.
+      Searches memory lattice nodes and decoded facts by keyword overlap and proximity across the active memory space. Use this tool for entity exploration or keyword discovery. For natural language question answering with grounded factual citations, use icx_recall_scoped instead. Read-only with no side effects.
     annotations:
       title: Search Simplicial Lattice Facts
       readOnlyHint: true
@@ -171,13 +188,13 @@ tools:
       properties:
         query:
           type: string
-          description: Search terms or entity names to search across simplicial lattice nodes.
+          description: Search terms or entity names to search across memory nodes.
         space_id:
           type: string
-          description: Optional memory space partition to search within.
+          description: Optional memory space partition to search within. Defaults to caller default space.
         limit:
           type: number
-          description: Maximum number of node matches to return (default: 20).
+          description: Maximum number of node matches to return (default: 20, min: 1, max: 100).
       required:
         - query
     outputSchema:
@@ -198,14 +215,23 @@ tools:
         matches:
           type: array
           description: Simplicial complex nodes matching search query
+          items:
+            type: object
         total_in_space:
           type: integer
           description: Total nodes in active memory space
+      required:
+        - status
+        - query
+        - space_id
+        - count
+        - matches
+        - total_in_space
 
   - name: icx_quote_slot
-    version: 0.4.0
+    version: 1.0.0
     description: >-
-      Deterministic zero-LLM verbatim register quoting by document family and ordinal slot index. Returns exact character-for-character stored bodies (e.g. quote exact contract amendment or code revision without AI rewriting).
+      Retrieves exact character-for-character verbatim text quotes from stored document registers by document family and ordinal slot index. Use this tool when exact contractual wording, legal clauses, or code revisions must be quoted without AI paraphrasing. Use icx_recall_scoped for semantic QA instead. Read-only with no side effects.
     annotations:
       title: Verbatim Register Quoting
       readOnlyHint: true
@@ -220,7 +246,7 @@ tools:
           description: 1-based ordinal member index (e.g. 1 for first revision, 2 for second revision).
         space_id:
           type: string
-          description: Optional memory space partition where the family was stored.
+          description: Optional memory space partition where the family was stored. Defaults to caller default space.
       required:
         - family
         - index
@@ -248,11 +274,19 @@ tools:
         sha256:
           type: string
           description: Cryptographic content hash
+      required:
+        - status
+        - family
+        - index
+        - space_id
+        - exact_quote
+        - source_uri
+        - sha256
 
   - name: icx_inspect_space
-    version: 0.4.0
+    version: 1.0.0
     description: >-
-      Audits and retrieves real-time telemetry for a partitioned memory space on the Volumetric Lattice Network (active node count, total synapses, response map facts, memory byte size, and contradiction alerts).
+      Audits and retrieves real-time telemetry for a partitioned memory space (active node count, total synapses, grounded facts count, memory state, and contradiction alarms). Use this tool to monitor memory health, verify ingestion, or inspect space capacity. Read-only with no side effects.
     annotations:
       title: Inspect Memory Space Telemetry
       readOnlyHint: true
@@ -286,11 +320,19 @@ tools:
         state:
           type: string
           description: Memory space state (active | idle)
+      required:
+        - status
+        - space_id
+        - active_nodes
+        - total_synapses
+        - grounded_facts_count
+        - contradictions_detected
+        - state
 
   - name: icx_reset_session
-    version: 0.4.0
+    version: 1.0.0
     description: >-
-      Resets conversational dialogue history for a session while strictly preserving all underlying crystallized knowledge, learned facts, and document weights in the memory space.
+      Resets conversational dialogue history for a session while strictly preserving all underlying crystallized knowledge, learned facts, and document weights in the memory space. Use when starting a new conversation topic while retaining all learned knowledge. Mutates session dialogue state but leaves persistent memory intact.
     annotations:
       title: Reset Conversation History
       readOnlyHint: false
@@ -299,7 +341,7 @@ tools:
       properties:
         space_id:
           type: string
-          description: Optional memory space partition whose turn history should be reset.
+          description: Optional memory space partition whose turn history should be reset. Defaults to caller default space.
     outputSchema:
       type: object
       properties:
@@ -315,3 +357,8 @@ tools:
         memory_crystallized_preserved:
           type: boolean
           description: Strictly true - underlying lattice memory is preserved
+      required:
+        - status
+        - space_id
+        - session_cleared
+        - memory_crystallized_preserved
