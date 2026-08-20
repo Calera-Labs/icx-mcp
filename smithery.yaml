@@ -24,17 +24,20 @@ transport:
 
 # Authentication & Configuration Requirements
 config:
+  type: object
   properties:
     X-License-Key:
       type: string
+      title: Calera Labs API License Key
       description: Calera Labs API key (obtain free at https://dashboard.caleralabs.com).
-      required: true
       isSecret: true
     X-Space-ID:
       type: string
-      description: Memory partition space ID (e.g., 'default', 'project_alpha', 'legal_vault').
-      required: false
+      title: Memory Space Partition ID
+      description: Optional memory partition space ID (e.g., 'default', 'project_alpha', 'legal_vault'). Defaults to 'default'.
       default: "default"
+  required:
+    - X-License-Key
 
 # Certified 6-Tool Surface Area with Input & Output Schemas
 tools:
