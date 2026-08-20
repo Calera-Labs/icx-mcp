@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+*.token
+.mcpregistry_*
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log
+logs/
+
+# Build & Test Artifacts
+dist/
+coverage/
+.turbo/
+.cache/

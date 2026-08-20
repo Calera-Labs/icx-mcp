@@ -1,0 +1,90 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "icx-mcp",
+  "title": "Calera Infinite Context (ICX) — Persistent Memory",
+  "vendor": "Calera Labs",
+  "maintainers": [
+    "Calera-Labs"
+  ],
+  "homepage": "https://icx.caleralabs.com/mcp",
+  "privacyPolicy": "https://caleralabs.com/privacy",
+  "documentation": "https://icx.caleralabs.com/mcp-docs",
+  "license": "Apache-2.0",
+  "description": "Persistent epistemic memory and sub-5ms associative recall on the Volumetric Lattice Network for AI agents and LLMs with zero context decay.",
+  "version": "0.4.0",
+  "transport": {
+    "type": "http",
+    "url": "https://icx.caleralabs.com/mcp",
+    "protocols": [
+      "mcp-streamable-http-v1"
+    ]
+  },
+  "auth": {
+    "type": "custom_header",
+    "header": "X-License-Key"
+  },
+  "tools": [
+    {
+      "name": "icx_remember",
+      "version": "0.4.0",
+      "description": "Crystallizes text, code, or structured knowledge into the persistent Volumetric Memory lattice. Ingests sentences into permanent topological simplicial nodes without context window token decay.",
+      "annotations": {
+        "title": "Remember Context / Document",
+        "readOnlyHint": false
+      }
+    },
+    {
+      "name": "icx_recall_scoped",
+      "version": "0.4.0",
+      "description": "Recalls exact grounded facts from the Volumetric Memory lattice matching a natural query. Returns zero-hallucination factual sentences, register slots, and document citations without attention diffusion.",
+      "annotations": {
+        "title": "Recall Grounded Facts",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "icx_search_facts",
+      "version": "0.4.0",
+      "description": "Searches simplicial lattice nodes and decoded facts by query keywords and manifold proximity.",
+      "annotations": {
+        "title": "Search Fact Lattice",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "icx_quote_slot",
+      "version": "0.4.0",
+      "description": "Performs deterministic zero-LLM verbatim quote retrieval for a specific document family and ordinal slot index.",
+      "annotations": {
+        "title": "Verbatim Slot Quote",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "icx_inspect_space",
+      "version": "0.4.0",
+      "description": "Inspects active memory space telemetry: total crystallized simplicial nodes, synapses, decoded facts, and contradiction alarms.",
+      "annotations": {
+        "title": "Inspect Memory Space Telemetry",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "icx_reset_session",
+      "version": "0.4.0",
+      "description": "Resets active conversation dialogue history while strictly preserving all underlying crystallized knowledge and simplicial nodes.",
+      "annotations": {
+        "title": "Reset Dialogue Session",
+        "readOnlyHint": false
+      }
+    }
+  ],
+  "tags": [
+    "infinite-context",
+    "persistent-memory",
+    "associative-recall",
+    "volumetric-lattice",
+    "zero-loss",
+    "calera-labs"
+  ]
+}

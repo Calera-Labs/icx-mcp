@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Calera-Labs/icx-mcp",
+  "title": "Calera Infinite Context (ICX) — Persistent Memory & Associative Recall",
+  "description": "Persistent epistemic memory and sub-5ms associative recall on the Volumetric Lattice Network for AI agents and LLMs with zero context decay.",
+  "repository": {
+    "url": "https://github.com/Calera-Labs/icx-mcp",
+    "source": "github"
+  },
+  "version": "0.4.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://icx.caleralabs.com/mcp",
+      "headers": [
+        {
+          "name": "X-License-Key",
+          "description": "Calera Labs API Key (obtain free at https://dashboard.caleralabs.com)",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "X-Space-ID",
+          "description": "Memory partition namespace (default: 'default')",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@caleralabs/icx-mcp",
+  "version": "0.4.0",
+  "type": "module",
+  "description": "Official Calera Labs Infinite Context (ICX) Model Context Protocol (MCP) Connector",
+  "main": "index.js",
+  "bin": {
+    "icx-mcp": "./index.js",
+    "infinite-context-mcp": "./index.js"
+  },
+  "mcpName": "io.github.Calera-Labs/icx-mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Calera-Labs/icx-mcp.git"
+  },
+  "homepage": "https://icx.caleralabs.com/mcp",
+  "license": "Apache-2.0",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "infinite-context",
+    "persistent-memory",
+    "volumetric-lattice-network",
+    "calera-labs",
+    "associative-recall",
+    "zero-loss-memory"
+  ]
+}
