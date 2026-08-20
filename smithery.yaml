@@ -67,26 +67,25 @@ tools:
   - name: icx_remember
     version: 0.4.0
     description: >-
-      Crystallizes text, code, or structured knowledge into the persistent Volumetric Memory lattice.
-      Ingests sentences into permanent topological simplicial nodes without context window token decay.
+      Ingests text, documents, code snippets, or conversational facts directly into the Volumetric Lattice Network memory manifold. Automatically forms simplicial pathways with sub-5ms crystallization and zero context window decay.
     annotations:
-      title: Remember Context / Document
+      title: Memorize Document or Fact
       readOnlyHint: false
     inputSchema:
       type: object
       properties:
         text:
           type: string
-          description: Verbatim raw text, document chunk, or fact statement to crystallize into permanent memory.
-        doc_id:
+          description: The raw text, markdown document, code file, or factual statement to memorize.
+        space_id:
           type: string
-          description: Unique document identifier or file path (e.g., 'contracts/master_services.pdf').
+          description: Optional memory space partition (e.g. 'codebase_docs', 'contracts_v2', 'user_preferences'). Defaults to caller's default space.
+        filename:
+          type: string
+          description: Optional filename or document title provenance tag (e.g. 'architecture.md', 'master_service_agreement.pdf').
         family:
           type: string
-          description: Semantic family category (e.g., 'contract', 'architecture', 'api_spec', 'general').
-        title:
-          type: string
-          description: Human-readable title for the document.
+          description: Optional document family grouping for deterministic verbatim register quoting (e.g. 'contract.indemnity', 'auth.tokens').
       required:
         - text
     outputSchema:
@@ -94,115 +93,166 @@ tools:
       properties:
         status:
           type: string
-          description: Crystallization status (stored | error)
-        doc_id:
+          description: Crystallization status (VERIFIED_STORED | error)
+        space_id:
           type: string
-        crystallized_nodes:
-          type: integer
-        grounded_facts:
-          type: integer
-        stored_at:
+          description: Target memory space partition
+        filename:
           type: string
+          description: Stored document identifier
+        family:
+          type: string
+          description: Document semantic family
+        learned_facts:
+          type: integer
+          description: Count of new simplicial facts learned
+        active_nodes:
+          type: integer
+          description: Total active nodes in memory space
+        bytes_ingested:
+          type: integer
+          description: Raw bytes stored in verbatim register
+        persisted_state:
+          type: string
+          description: Storage layer provenance
 
   - name: icx_recall_scoped
     version: 0.4.0
     description: >-
-      Recalls exact grounded facts from the Volumetric Memory lattice matching a natural query.
-      Returns zero-hallucination factual sentences, register slots, and document citations without attention diffusion.
+      Performs geodesic associative recall across the Volumetric Lattice Network to retrieve exact Grounded Facts, citations, and provenance records without needle loss or context compression.
     annotations:
-      title: Recall Grounded Facts
+      title: Scoped Memory Recall
       readOnlyHint: true
     inputSchema:
       type: object
       properties:
         query:
           type: string
-          description: Natural language recall question or search topic (e.g., 'What is the indemnity cap in the Acme MSA?').
+          description: Natural language question, keyword, or concept to recall from persistent lattice memory.
         space_id:
           type: string
-          description: Optional memory partition namespace. Defaults to current session space.
-        max_facts:
-          type: integer
-          description: Maximum number of grounded facts to return in viewport (default: 8, max: 32).
+          description: Optional memory space partition to restrict recall to.
+        top_k:
+          type: number
+          description: Maximum number of grounded facts to retrieve (default: 10, max: 50).
       required:
         - query
     outputSchema:
       type: object
       properties:
+        status:
+          type: string
+          description: Recall status (VERIFIED_RECALL | NO_GROUNDED_FACTS_FOUND)
         query:
           type: string
-        facts_count:
+          description: Natural language query submitted
+        space_id:
+          type: string
+          description: Target memory space partition
+        count:
           type: integer
-        viewport_grounded_facts:
+          description: Number of grounded facts returned
+        facts:
           type: array
-        citations:
-          type: array
-        latency_ms:
-          type: number
+          description: List of recalled grounded facts and citations
+        total_in_space:
+          type: integer
+          description: Total nodes in active memory space
 
   - name: icx_search_facts
     version: 0.4.0
     description: >-
-      Searches simplicial lattice nodes and decoded facts by query keywords and manifold proximity.
+      Searches simplicial lattice nodes and decoded facts by partial query overlap and manifold proximity across the active memory space.
     annotations:
-      title: Search Fact Lattice
+      title: Search Simplicial Lattice Facts
       readOnlyHint: true
     inputSchema:
       type: object
       properties:
         query:
           type: string
-          description: Keyword phrase or entity name to locate across crystallized simplicial complexes.
+          description: Search terms or entity names to search across simplicial lattice nodes.
+        space_id:
+          type: string
+          description: Optional memory space partition to search within.
         limit:
-          type: integer
-          description: Maximum number of facts to return (default: 10).
+          type: number
+          description: Maximum number of node matches to return (default: 20).
       required:
         - query
     outputSchema:
       type: object
       properties:
+        status:
+          type: string
+          description: Search status
         query:
           type: string
-        total_found:
+          description: Search keyword query
+        space_id:
+          type: string
+          description: Target memory space partition
+        count:
           type: integer
-        facts:
+          description: Number of matching nodes found
+        matches:
           type: array
+          description: Simplicial complex nodes matching search query
+        total_in_space:
+          type: integer
+          description: Total nodes in active memory space
 
   - name: icx_quote_slot
     version: 0.4.0
     description: >-
-      Performs deterministic zero-LLM verbatim quote retrieval for a specific document family and ordinal slot index.
+      Deterministic zero-LLM verbatim register quoting by document family and ordinal slot index. Returns exact character-for-character stored bodies (e.g. quote exact contract amendment or code revision without AI rewriting).
     annotations:
-      title: Verbatim Slot Quote
+      title: Verbatim Register Quoting
       readOnlyHint: true
     inputSchema:
       type: object
       properties:
         family:
           type: string
-          description: Document family (e.g., 'contract.indemnity', 'section.compliance').
-        slot:
-          type: integer
-          description: Ordinal slot index (1-based integer).
+          description: Document family identifier (e.g. 'contract.indemnity', 'msa.pricing').
+        index:
+          type: number
+          description: 1-based ordinal member index (e.g. 1 for first revision, 2 for second revision).
+        space_id:
+          type: string
+          description: Optional memory space partition where the family was stored.
       required:
         - family
-        - slot
+        - index
     outputSchema:
       type: object
       properties:
+        status:
+          type: string
+          description: Retrieval status (VERIFIED_VERBATIM_QUOTE | REGISTER_SLOT_EMPTY)
         family:
           type: string
-        slot:
+          description: Document family category
+        index:
           type: integer
+          description: Ordinal slot index (1-based)
+        space_id:
+          type: string
+          description: Target memory space partition
         exact_quote:
           type: string
+          description: Verbatim character-exact text stored in register
         source_uri:
           type: string
+          description: Original document source URI
+        sha256:
+          type: string
+          description: Cryptographic content hash
 
   - name: icx_inspect_space
     version: 0.4.0
     description: >-
-      Inspects active memory space telemetry: total crystallized simplicial nodes, synapses, decoded facts, and contradiction alarms.
+      Audits and retrieves real-time telemetry for a partitioned memory space on the Volumetric Lattice Network (active node count, total synapses, response map facts, memory byte size, and contradiction alerts).
     annotations:
       title: Inspect Memory Space Telemetry
       readOnlyHint: true
@@ -211,42 +261,57 @@ tools:
       properties:
         space_id:
           type: string
-          description: Memory partition space ID (defaults to 'default').
+          description: Optional memory space partition to inspect. Defaults to caller default space.
     outputSchema:
       type: object
       properties:
+        status:
+          type: string
+          description: Space inspection status
         space_id:
           type: string
+          description: Target memory space partition
         active_nodes:
           type: integer
+          description: Active topological simplicial nodes
         total_synapses:
           type: integer
-        grounded_facts:
+          description: Total learned neural synapses
+        grounded_facts_count:
           type: integer
+          description: Total decoded grounded facts
         contradictions_detected:
           type: integer
+          description: Contradiction alarms in space
         state:
           type: string
+          description: Memory space state (active | idle)
 
   - name: icx_reset_session
     version: 0.4.0
     description: >-
-      Resets active conversation dialogue history while strictly preserving all underlying crystallized knowledge and simplicial nodes.
+      Resets conversational dialogue history for a session while strictly preserving all underlying crystallized knowledge, learned facts, and document weights in the memory space.
     annotations:
-      title: Reset Dialogue Session
+      title: Reset Conversation History
       readOnlyHint: false
     inputSchema:
       type: object
       properties:
         space_id:
           type: string
-          description: Space ID where dialogue history should be reset.
+          description: Optional memory space partition whose turn history should be reset.
     outputSchema:
       type: object
       properties:
+        status:
+          type: string
+          description: Reset status (SESSION_RESET_SUCCESS)
         space_id:
           type: string
+          description: Target memory space partition
         session_cleared:
           type: boolean
+          description: Whether dialogue turns were cleared
         memory_crystallized_preserved:
           type: boolean
+          description: Strictly true - underlying lattice memory is preserved
