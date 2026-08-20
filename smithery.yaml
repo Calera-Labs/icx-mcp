@@ -22,7 +22,26 @@ transport:
   type: http
   url: https://icx.caleralabs.com/mcp
 
-# Authentication & Configuration Requirements
+# Authentication & Configuration Requirements (Smithery Session Config)
+configSchema:
+  type: object
+  properties:
+    licenseKey:
+      type: string
+      title: API License Key
+      description: Calera Labs API key (obtain free at https://dashboard.caleralabs.com).
+      x-from:
+        header: X-License-Key
+    spaceId:
+      type: string
+      title: Memory Space ID
+      description: Optional memory partition space ID (e.g., 'default', 'project_alpha', 'legal_vault'). Defaults to 'default'.
+      default: "default"
+      x-from:
+        header: X-Space-ID
+  required:
+    - licenseKey
+
 config:
   type: object
   properties:
@@ -31,11 +50,15 @@ config:
       title: Calera Labs API License Key
       description: Calera Labs API key (obtain free at https://dashboard.caleralabs.com).
       isSecret: true
+      x-from:
+        header: X-License-Key
     X-Space-ID:
       type: string
       title: Memory Space Partition ID
       description: Optional memory partition space ID (e.g., 'default', 'project_alpha', 'legal_vault'). Defaults to 'default'.
       default: "default"
+      x-from:
+        header: X-Space-ID
   required:
     - X-License-Key
 
