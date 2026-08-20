@@ -3,6 +3,7 @@
 [![MCP Registry](https://img.shields.io/badge/MCP-Registry_Indexed-blue.svg)](https://registry.modelcontextprotocol.io)
 [![smithery badge](https://smithery.ai/badge/calera-labs/icx-mcp)](https://smithery.ai/servers/calera-labs/icx-mcp)
 [![Glama MCP](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp/badge)](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp)
+[![Glama MCP Score](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp/badges/score.svg)](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 [![RULER Score](https://img.shields.io/badge/RULER_MRCR_v2-96.28%25_(466%2F484)-emerald.svg)](https://icx.caleralabs.com/paper)
 [![Latency](https://img.shields.io/badge/Recall_Latency-Sub--5ms_Topological-purple.svg)](https://icx.caleralabs.com)
@@ -129,14 +130,14 @@ If your environment only supports local `stdio` sub-processes:
 
 ## 🛠️ Certified MCP Tools Reference
 
-| Tool | Purpose | Primary Inputs |
-| :--- | :--- | :--- |
-| **`icx_remember`** | Crystallizes raw text, docs, code, or invariants into permanent simplicial lattice nodes with sub-5ms latency. | `text` (required), `doc_id`, `family`, `title` |
-| **`icx_recall_scoped`** | Geodesic associative recall returning grounded facts, citations, and slot indices without context diffusion. | `query` (required), `space_id`, `max_facts` |
-| **`icx_search_facts`** | Keyword and semantic proximity search across crystallized memory nodes. | `query` (required), `limit` |
-| **`icx_quote_slot`** | Deterministic zero-LLM verbatim quote retrieval from stored document register slots. | `family` (required), `slot` (required) |
-| **`icx_inspect_space`** | Real-time telemetry: active nodes, total synapses, response map facts, and contradiction alerts. | `space_id` (optional) |
-| **`icx_reset_session`** | Resets conversation dialogue history while preserving crystallized knowledge. | `space_id` (optional) |
+| Tool | Purpose | Primary Inputs | Behavior |
+| :--- | :--- | :--- | :--- |
+| **`icx_remember`** | Stores text, code, decisions, and documentation into persistent long-term memory. | `text` (required), `space_id`, `filename`, `family` | Additive & Non-destructive |
+| **`icx_recall_scoped`** | Performs semantic search across memory to retrieve grounded facts and source citations for QA. | `query` (required), `space_id`, `top_k` | Read-only |
+| **`icx_search_facts`** | Keyword and entity search across memory nodes for lexical exploration and token lookup. | `query` (required), `space_id`, `limit` | Read-only |
+| **`icx_quote_slot`** | Retrieves exact character-for-character verbatim text and SHA-256 hashes from document registers. | `family` (required), `index` (required), `space_id` | Read-only |
+| **`icx_inspect_space`** | Returns diagnostic telemetry: active nodes, total synapses, grounded facts, and contradiction alarms. | `space_id` (optional) | Read-only |
+| **`icx_reset_session`** | Clears conversational turn history while preserving all underlying persistent memory. | `space_id` (optional) | Mutates session only |
 
 ---
 
