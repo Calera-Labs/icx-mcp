@@ -1,0 +1,28 @@
+name: 💡 Feature Request
+description: Propose a new feature, tool capability, or integration for ICX MCP
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome community ideas and feature requests for extending Infinite Context memory capabilities.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Motivation
+      description: Is your feature request related to a specific workflow problem or pain point?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / Tool Design
+      description: Describe what new tool, parameter, or behavior you would like to see.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative workarounds or designs you've evaluated.

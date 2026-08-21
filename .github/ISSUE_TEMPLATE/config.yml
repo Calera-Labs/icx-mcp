@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Calera Community & Support
+    url: https://dashboard.caleralabs.com
+    about: Get free API keys, inspect telemetry, or ask questions to the team.
+  - name: 📖 ICX Documentation
+    url: https://icx.caleralabs.com/mcp-docs
+    about: View full interactive tool signatures, API parameters, and code examples.

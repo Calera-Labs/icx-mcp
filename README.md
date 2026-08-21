@@ -161,6 +161,12 @@ Before answering historical codebase questions or resolving complex dependencies
 
 ---
 
+## 🔗 Related Calera MCP Servers
+
+* **[Calera FINSEC MCP](https://github.com/Calera-Labs/finsec-mcp):** Certified SEC EDGAR financial memory for AI agents with 0.00% statistical hallucination and cryptographic filing provenance ([Glama Hub](https://glama.ai/mcp/servers/Calera-Labs/finsec-mcp) · [Smithery](https://smithery.ai/servers/calera-labs/finsec)).
+
+---
+
 ## 📄 License
 
 Apache License 2.0. See [LICENSE](LICENSE) for details. Built by [Calera Labs](https://caleralabs.com).

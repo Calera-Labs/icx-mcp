@@ -1,0 +1,55 @@
+name: 🐛 Bug Report
+description: Report an issue or unexpected behavior with ICX MCP
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please provide as much detail as possible to help us reproduce and resolve the problem quickly.
+  - type: input
+    id: version
+    attributes:
+      label: MCP Connector Version
+      description: What version or commit of `icx-mcp` are you using?
+      placeholder: "e.g., 1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: MCP Client Host
+      description: Which client is hosting the MCP connector?
+      options:
+        - Claude Desktop
+        - Cursor IDE
+        - Zed Editor
+        - VS Code (Continue/Roo/Cline)
+        - Custom SDK / Autonomous Agent Swarm
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Issue
+      description: Explain what happened and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions or tool invocation payload.
+      placeholder: |
+        1. Call tool `icx_remember` with payload ...
+        2. Call tool `icx_recall_scoped` with query ...
+        3. See error response ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Error Output
+      description: Relevant terminal logs or MCP error messages.
+      render: shell
