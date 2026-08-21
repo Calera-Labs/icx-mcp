@@ -7,11 +7,13 @@
     "url": "https://github.com/Calera-Labs/icx-mcp",
     "source": "github"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "protocolVersion": "2026-07-28",
   "remotes": [
     {
       "type": "streamable-http",
       "url": "https://icx.caleralabs.com/mcp",
+      "protocolVersion": "2026-07-28",
       "headers": [
         {
           "name": "X-License-Key",

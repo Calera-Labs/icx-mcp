@@ -17,6 +17,7 @@ Official **Model Context Protocol (MCP)** connector for **Calera Labs Infinite C
 ## ⚡ Why ICX Over Naive 1M+ Context Windows?
 
 * **Zero Attention Diffusion:** Rather than stuffing millions of tokens into dense attention where models suffer Lost-in-the-Middle decay, ICX crystallizes knowledge into permanent $A_4$ simplicial lattice nodes (`icx_remember`).
+* **2026-07-28 Stateless Protocol Core:** Fully compliant with the 2026-07-28 Stateless MCP Specification (SEP-2243, SEP-2575, SEP-2549) with sub-5ms zero-handshake direct tool calls and intelligent caching (`ttlMs: 86400000`).
 * **Sub-5ms Scoped Recall:** Geodesic associative search returns verified factual sentences and verbatim quotes through a compact numbered viewport (`icx_recall_scoped`).
 * **Benchmark Provenance:**
   * **96.28% (466/484 exact)** on RULER MRCR v2 at 128k context.

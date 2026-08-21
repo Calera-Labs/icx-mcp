@@ -1,6 +1,6 @@
 {
   "name": "@caleralabs/icx-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Official Calera Labs Infinite Context (ICX) Model Context Protocol (MCP) Connector",
   "main": "index.js",

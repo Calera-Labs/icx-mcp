@@ -11,11 +11,14 @@
   "documentation": "https://icx.caleralabs.com/mcp-docs",
   "license": "Apache-2.0",
   "description": "Persistent long-term memory and sub-5ms associative recall for AI agents and LLMs with zero context window decay.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "protocolVersion": "2026-07-28",
+  "stateless": true,
   "transport": {
     "type": "http",
     "url": "https://icx.caleralabs.com/mcp",
     "protocols": [
+      "2026-07-28",
       "mcp-streamable-http-v1"
     ]
   },

@@ -21,16 +21,25 @@ rl.on('line', async (line) => {
 
   try {
     const payload = JSON.parse(line);
-    
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-License-Key': LICENSE_KEY,
+      'X-Space-ID': SPACE_ID,
+      'MCP-Protocol-Version': '2026-07-28',
+      'User-Agent': 'Calera-ICX-MCP-Node/0.4.1'
+    };
+
+    if (payload && payload.method) {
+      headers['Mcp-Method'] = String(payload.method);
+      if (payload.params && payload.params.name) {
+        headers['Mcp-Name'] = String(payload.params.name);
+      }
+    }
+
     // Forward JSON-RPC request to Calera ICX endpoint
     const response = await fetch(API_ENDPOINT, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-License-Key': LICENSE_KEY,
-        'X-Space-ID': SPACE_ID,
-        'User-Agent': 'Calera-ICX-MCP-Node/0.4.0'
-      },
+      headers,
       body: JSON.stringify(payload)
     });
 

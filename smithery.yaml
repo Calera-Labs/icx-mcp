@@ -17,10 +17,12 @@ tags:
   - volumetric-lattice
   - calera-labs
 
-# Transport configuration (Streamable Remote HTTP)
+# Transport configuration (Streamable Remote HTTP / 2026-07-28 Stateless Core)
 transport:
   type: http
   url: https://icx.caleralabs.com/mcp
+  protocolVersion: "2026-07-28"
+  stateless: true
 
 # Authentication & Configuration Requirements (Smithery Session Config)
 configSchema:
