@@ -139,6 +139,11 @@ If your environment only supports local `stdio` sub-processes:
 | **`icx_quote_slot`** | Retrieves exact character-for-character verbatim text and SHA-256 hashes from document registers. | `family` (required), `index` (required), `space_id` | Read-only |
 | **`icx_inspect_space`** | Returns diagnostic telemetry: active nodes, total synapses, grounded facts, and contradiction alarms. | `space_id` (optional) | Read-only |
 | **`icx_reset_session`** | Clears conversational turn history while preserving all underlying persistent memory. | `space_id` (optional) | Mutates session only |
+| **`icx_sync_delta`** | Extracts fine-grained text/JSON deltas and crystallizes them into the lattice in sub-2ms on CPU. | `new_text` (required), `old_text`, `uri`, `source_id`, `space_id` | Mutating Sync |
+| **`icx_list_connectors`** | Lists all active continuous changefeed connectors (GitHub, GitLab, Notion, Drive, Linear, Slack, SQL). | *None* | Read-only |
+| **`icx_register_connector`** | Registers a new cloud webhook changefeed connector with AES-256-GCM secret vaulting. | `type` (required), `name` (required), `target_uri` (required), `webhook_secret` | Mutating Sync |
+| **`icx_purge_source`** | Executes O(1) instant memory unlinking and revocation of all facts from a source without retraining. | `source_id` (required), `space_id` | Mutating Purge |
+| **`icx_sync_audit`** | Retrieves historical delta synchronization events, deltas processed, facts learned, and latency metrics. | *None* | Read-only |
 
 ---
 

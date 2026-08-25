@@ -422,6 +422,144 @@
           "memory_crystallized_preserved"
         ]
       }
+    },
+    {
+      "name": "icx_sync_delta",
+      "version": "1.1.0",
+      "description": "Extracts fine-grained deltas between previous text/document state and updated state, and crystallizes them into the Volumetric Memory lattice in sub-2ms on CPU with automatic secret scrubbing and SHA-256 deduplication. Use this tool for continuous incremental sync of code files, documentation, PRDs, and database schemas. Mutating operation. Requires X-License-Key authentication.",
+      "annotations": {
+        "title": "Crystallize Incremental Delta",
+        "readOnlyHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "new_text": { "type": "string", "description": "New updated text/code/document state after modifications." },
+          "old_text": { "type": "string", "description": "Previous text/code/document state before modifications." },
+          "uri": { "type": "string", "description": "Document or file URI identifier (e.g. 'src/backend/engine.go', 'docs/rfc_42.md')." },
+          "source_id": { "type": "string", "description": "Optional connector or source identifier tracking provenance for instant purge. Defaults to 'mcp_sync'." },
+          "space_id": { "type": "string", "description": "Optional memory space partition. Defaults to 'default'." }
+        },
+        "required": ["new_text"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "Crystallization status (VERIFIED_CRYSTALLIZED | error)" },
+          "space_id": { "type": "string" },
+          "uri": { "type": "string" },
+          "deltas_processed": { "type": "integer" },
+          "facts_learned": { "type": "integer" },
+          "facts_invalidated": { "type": "integer" },
+          "duration_ms": { "type": "number" }
+        },
+        "required": ["status", "space_id", "uri", "deltas_processed", "facts_learned", "facts_invalidated", "duration_ms"]
+      }
+    },
+    {
+      "name": "icx_list_connectors",
+      "version": "1.1.0",
+      "description": "Lists all active cloud changefeed connectors (GitHub, GitLab, Notion, Google Drive, Linear, Slack, PostgreSQL) registered for the tenant. Read-only operation. Requires X-License-Key authentication.",
+      "annotations": {
+        "title": "List Auto-Sync Connectors",
+        "readOnlyHint": true
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "total": { "type": "integer" },
+          "connectors": { "type": "array", "items": { "type": "object" } }
+        },
+        "required": ["status", "total", "connectors"]
+      }
+    },
+    {
+      "name": "icx_register_connector",
+      "version": "1.1.0",
+      "description": "Registers a new cloud webhook changefeed connector for continuous epistemic auto-sync with AES-256-GCM secret vaulting and HMAC signature verification. Mutating operation. Requires X-License-Key authentication.",
+      "annotations": {
+        "title": "Register Auto-Sync Connector",
+        "readOnlyHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "description": "Connector source type ('github', 'gitlab', 'notion', 'gdrive', 'linear', 'slack', 'postgres', 'generic')." },
+          "name": { "type": "string", "description": "Human-readable name for the connector." },
+          "target_uri": { "type": "string", "description": "Target repository URL, Notion workspace URL, or resource URI." },
+          "webhook_secret": { "type": "string", "description": "Optional custom webhook secret or HMAC key." }
+        },
+        "required": ["type", "name", "target_uri"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "connector_id": { "type": "string" },
+          "type": { "type": "string" },
+          "name": { "type": "string" },
+          "target_uri": { "type": "string" },
+          "webhook_url": { "type": "string" },
+          "webhook_secret": { "type": "string" }
+        },
+        "required": ["status", "connector_id", "type", "name", "target_uri", "webhook_url"]
+      }
+    },
+    {
+      "name": "icx_purge_source",
+      "version": "1.1.0",
+      "description": "Executes O(1) instant memory unlinking and revocation of all facts, simplices, and document associations learned from a specific data source or connector without requiring model retraining. Mutating operation. Requires X-License-Key authentication.",
+      "annotations": {
+        "title": "O(1) Instant Source Memory Purge",
+        "readOnlyHint": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "source_id": { "type": "string", "description": "The source_id or connector_id whose facts should be instantly purged from tenant memory." },
+          "space_id": { "type": "string", "description": "Optional memory space partition. Defaults to 'default'." }
+        },
+        "required": ["source_id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "source_id": { "type": "string" },
+          "unlinked_facts": { "type": "integer" },
+          "message": { "type": "string" }
+        },
+        "required": ["status", "source_id", "unlinked_facts", "message"]
+      }
+    },
+    {
+      "name": "icx_sync_audit",
+      "version": "1.1.0",
+      "description": "Retrieves historical synchronization events, deltas processed, facts learned, and sub-2ms latency telemetry for compliance and audit auditing. Read-only operation. Requires X-License-Key authentication.",
+      "annotations": {
+        "title": "Auto-Sync Audit Logs",
+        "readOnlyHint": true
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "total": { "type": "integer" },
+          "audit_logs": { "type": "array", "items": { "type": "object" } }
+        },
+        "required": ["status", "total", "audit_logs"]
+      }
     }
   ],
   "tags": [
