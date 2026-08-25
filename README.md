@@ -144,6 +144,7 @@ If your environment only supports local `stdio` sub-processes:
 | **`icx_register_connector`** | Registers a new cloud webhook changefeed connector with AES-256-GCM secret vaulting. | `type` (required), `name` (required), `target_uri` (required), `webhook_secret` | Mutating Sync |
 | **`icx_purge_source`** | Executes O(1) instant memory unlinking and revocation of all facts from a source without retraining. | `source_id` (required), `space_id` | Mutating Purge |
 | **`icx_sync_audit`** | Retrieves historical delta synchronization events, deltas processed, facts learned, and latency metrics. | *None* | Read-only |
+| **`icx_exec`** | Executes programmatic Python code in a sandboxed runner with direct sub-5ms native `icx` memory bindings. | `code` (required), `space_id`, `timeout_ms` | Programmatic CodeAct |
 
 ---
 
