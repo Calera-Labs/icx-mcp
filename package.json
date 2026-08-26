@@ -1,8 +1,8 @@
 {
   "name": "@caleralabs/icx-mcp",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "type": "module",
-  "description": "Official Calera Labs Infinite Context (ICX) Model Context Protocol (MCP) Connector",
+  "description": "Official Calera Labs Infinite Context (ICX) Model Context Protocol (MCP) Server with 18 Tools, A4 Transitive Graph Walking, Sub-100µs WASM Execution, and Multi-Agent Swarm Memory",
   "main": "index.js",
   "bin": {
     "icx-mcp": "./index.js",
@@ -26,6 +26,10 @@
     "volumetric-lattice-network",
     "calera-labs",
     "associative-recall",
-    "zero-loss-memory"
+    "zero-loss-memory",
+    "codeact",
+    "wasm",
+    "transitive-graph-walker",
+    "multi-agent-swarms"
   ]
 }

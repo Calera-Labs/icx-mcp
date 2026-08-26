@@ -535,7 +535,7 @@ tools:
         - message
 
   - name: icx_sync_audit
-    version: 1.1.0
+    version: 1.3.0
     description: >-
       Retrieves historical synchronization events, deltas processed, facts learned, and sub-2ms latency telemetry for compliance and audit auditing. Read-only operation. Requires X-License-Key authentication.
     annotations:
@@ -560,4 +560,233 @@ tools:
         - status
         - total
         - audit_logs
+
+  - name: icx_exec
+    version: 1.3.0
+    description: >-
+      Executes programmatic Python code in a sandboxed runner with direct sub-5ms native icx memory bindings for 0.00% arithmetic hallucination.
+    annotations:
+      title: CodeAct Programmatic Memory Sandbox
+    inputSchema:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Python code to execute in the sandbox.
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+        timeout_ms:
+          type: integer
+          description: Execution timeout in milliseconds (default: 3000ms).
+      required:
+        - code
+    outputSchema:
+      type: object
+      properties:
+        stdout:
+          type: string
+        stderr:
+          type: string
+        execution_duration_ms:
+          type: number
+        memory_ops:
+          type: integer
+
+  - name: icx_wasm_exec
+    version: 1.3.0
+    description: >-
+      Executes in-process WebAssembly or native memory scripts with sub-100µs latency and 0.00% math error without OS subprocess overhead.
+    annotations:
+      title: In-Process WASM Kernel Execution
+    inputSchema:
+      type: object
+      properties:
+        wasm_base64:
+          type: string
+          description: Base64-encoded WASM binary module.
+        wat_text:
+          type: string
+          description: WebAssembly text format (WAT) string.
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+      required: []
+    outputSchema:
+      type: object
+      properties:
+        stdout:
+          type: string
+        duration_ms:
+          type: number
+        memory_ops:
+          type: integer
+
+  - name: icx_multihop_walk
+    version: 1.3.0
+    description: >-
+      Executes sub-1ms A4 simplicial transitive graph walking to resolve multi-hop causal chains and transitive relationships in a single CPU pass.
+    annotations:
+      title: A4 Simplicial Transitive Graph Walker
+      readOnlyHint: true
+    inputSchema:
+      type: object
+      properties:
+        root_entity:
+          type: string
+          description: Starting root entity or concept to begin traversal.
+        target_relation:
+          type: string
+          description: Target relation or predicate filter (e.g., 'holds_authority_over', 'listens_on').
+        max_hops:
+          type: integer
+          description: Maximum transitive hops to traverse (default: 5, max: 10).
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+      required:
+        - root_entity
+    outputSchema:
+      type: object
+      properties:
+        success:
+          type: boolean
+        hops_count:
+          type: integer
+        pathway:
+          type: array
+          items:
+            type: string
+        terminal_fact:
+          type: string
+        duration_ms:
+          type: number
+
+  - name: icx_swarm_state
+    version: 1.3.0
+    description: >-
+      Inspects or manages multi-agent shared workspace variables (V_t) and distributed leases across heterogeneous agent teams.
+    annotations:
+      title: Multi-Agent Shared Swarm State
+    inputSchema:
+      type: object
+      properties:
+        action:
+          type: string
+          description: Action to perform ('get', 'set', 'list', 'lease').
+          enum: ["get", "set", "list", "lease"]
+        var_name:
+          type: string
+          description: Variable name in shared swarm workspace.
+        var_value:
+          type: string
+          description: Variable value to set (for action='set').
+        lease_ttl_ms:
+          type: integer
+          description: Mutex lease TTL in milliseconds (for action='lease').
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+      required:
+        - action
+    outputSchema:
+      type: object
+      properties:
+        status:
+          type: string
+        action:
+          type: string
+        variables:
+          type: object
+        message:
+          type: string
+
+  - name: icx_var_set
+    version: 1.3.0
+    description: >-
+      Stores typed structured data (JSON, ASTs, schemas) into shared agent variable space with atomic CAS support.
+    annotations:
+      title: Set Swarm Variable
+    inputSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Unique variable name in workspace.
+        value:
+          type: string
+          description: Structured data or string payload.
+        expected_version:
+          type: integer
+          description: Optional expected version for Compare-And-Swap.
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+      required:
+        - name
+        - value
+    outputSchema:
+      type: object
+      properties:
+        status:
+          type: string
+        name:
+          type: string
+        version:
+          type: integer
+
+  - name: icx_var_get
+    version: 1.3.0
+    description: >-
+      Retrieves shared workspace variable with version metadata and lease validation.
+    annotations:
+      title: Get Swarm Variable
+      readOnlyHint: true
+    inputSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Unique variable name to retrieve.
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+      required:
+        - name
+    outputSchema:
+      type: object
+      properties:
+        status:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+        version:
+          type: integer
+
+  - name: icx_var_list
+    version: 1.3.0
+    description: >-
+      Lists all registered variable names and schema types in the multi-agent shared workspace.
+    annotations:
+      title: List Swarm Variables
+      readOnlyHint: true
+    inputSchema:
+      type: object
+      properties:
+        space_id:
+          type: string
+          description: Optional memory space partition ID.
+      required: []
+    outputSchema:
+      type: object
+      properties:
+        status:
+          type: string
+        variables:
+          type: array
+          items:
+            type: object
+
 
