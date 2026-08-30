@@ -144,7 +144,7 @@ tools:
           description: Optional memory space partition to restrict recall to (e.g. 'default', 'codebase_docs'). Defaults to caller default space.
         top_k:
           type: number
-          description: Maximum number of grounded facts to retrieve (default: 10, min: 1, max: 50).
+          description: "Maximum number of grounded facts to retrieve (default: 10, min: 1, max: 50)."
       required:
         - query
     outputSchema:
@@ -152,7 +152,7 @@ tools:
       properties:
         status:
           type: string
-          description: Recall status (VERIFIED_RECALL | NO_GROUNDED_FACTS_FOUND)
+          description: "Recall status (VERIFIED_RECALL | NO_GROUNDED_FACTS_FOUND)"
         query:
           type: string
           description: Natural language query submitted
@@ -196,7 +196,7 @@ tools:
           description: Optional memory space partition to search within. Defaults to caller default space.
         limit:
           type: number
-          description: Maximum number of node matches to return (default: 20, min: 1, max: 100).
+          description: "Maximum number of node matches to return (default: 20, min: 1, max: 100)."
       required:
         - query
     outputSchema:
@@ -245,7 +245,7 @@ tools:
           description: Document family identifier specified during ingestion (e.g. 'contract.indemnity', 'msa.pricing', 'auth.tokens').
         index:
           type: number
-          description: 1-based ordinal member index (e.g. 1 for first revision, 2 for second revision). Minimum: 1.
+          description: "1-based ordinal member index (e.g. 1 for first revision, 2 for second revision). Minimum: 1."
         space_id:
           type: string
           description: Optional memory space partition where the family was stored. Defaults to caller default space.
@@ -578,7 +578,7 @@ tools:
           description: Optional memory space partition ID.
         timeout_ms:
           type: integer
-          description: Execution timeout in milliseconds (default: 3000ms).
+          description: "Execution timeout in milliseconds (default: 3000ms)."
       required:
         - code
     outputSchema:
@@ -640,7 +640,7 @@ tools:
           description: Target relation or predicate filter (e.g., 'holds_authority_over', 'listens_on').
         max_hops:
           type: integer
-          description: Maximum transitive hops to traverse (default: 5, max: 10).
+          description: "Maximum transitive hops to traverse (default: 5, max: 10)."
         space_id:
           type: string
           description: Optional memory space partition ID.
