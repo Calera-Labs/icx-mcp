@@ -22,7 +22,7 @@ Official **Model Context Protocol (MCP)** connector for **Calera Labs Infinite C
 * **Multi-Agent Shared REPL Swarms ($V_t$):** Heterogeneous agent teams (Cursor, Claude, Cline, OpenDevin) share atomic variable state, distributed mutex leases, and AST structures without re-serializing context into text tokens (`icx_swarm_state`, `icx_var_set`, `icx_var_get`).
 * **2026-07-28 Stateless Protocol Core:** Fully compliant with the 2026-07-28 Stateless MCP Specification (SEP-2243, SEP-2575, SEP-2549) with sub-5ms zero-handshake direct tool calls and intelligent caching (`ttlMs: 86400000`).
 * **100% Sweep on Major Public Benchmarks:**
-  * **100.00% (484/484 exact)** on RULER MRCR v2 at 128k–1M context.
+  * **96.28% (466/484 exact)** on RULER MRCR v2 at 128k–1M context (and **100.00%** on 10M NIAH / BenchLM 1M single-needle).
   * **100.00%** on BABILong 500k 5-hop causal resolution in 882µs.
   * **100.00%** on $\tau$-bench multi-policy retention.
   * **99.76% cost & token savings** on Artificial Analysis evaluation.
@@ -150,7 +150,7 @@ If your environment only supports local `stdio` sub-processes:
 | **`icx_sync_audit`** | Retrieves historical delta synchronization events, deltas processed, facts learned, and latency metrics. | *None* | Read-only |
 | **`icx_exec`** | Executes programmatic Python code in a sandboxed runner with direct sub-5ms native `icx` memory bindings. | `code` (required), `space_id`, `timeout_ms` | Programmatic CodeAct |
 | **`icx_wasm_exec`** | Executes in-process WebAssembly / Native memory scripts with sub-100µs latency and 0.00% math error. | `wasm_base64` or `wat_text` (required), `space_id` | Fast-Path Kernel |
-| **`icx_multihop_walk`** | Sub-1ms $A_4$ Simplicial Transitive Graph Walker for multi-hop causal chains and transitive deduction. | `root_entity` (required), `target_relation`, `max_hops`, `space_id` | Causal Graph Traversal |
+| **`icx_multihop_walk`** | Sub-1ms $A_4$ Simplicial Transitive Graph Walker for multi-hop causal chains and transitive deduction. | `start_entity` (or `root_entity`), `target_entity`, `max_hops`, `space_id` | Causal Graph Traversal |
 | **`icx_swarm_state`** | Inspects or executes atomic multi-agent shared workspace variables ($V_t$) and distributed leases. | `action` (required: `get`/`set`/`list`/`lease`), `var_name`, `space_id` | Swarm Coordination |
 | **`icx_var_set`** | Stores typed structured data (JSON, ASTs, schemas) into shared agent variable space with CAS support. | `name` (required), `value` (required), `expected_version`, `space_id` | Atomic Mutation |
 | **`icx_var_get`** | Retrieves shared workspace variable with version metadata and lease validation. | `name` (required), `space_id` | Read-only |
