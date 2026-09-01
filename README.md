@@ -1,7 +1,7 @@
 # Infinite Context (ICX) — Persistent Memory MCP Server
 
 [![MCP Registry](https://img.shields.io/badge/MCP-Registry_Indexed-blue.svg)](https://registry.modelcontextprotocol.io)
-[![smithery badge](https://smithery.ai/badge/calera-labs/icx-mcp)](https://smithery.ai/servers/calera-labs/icx-mcp)
+[![Smithery](https://img.shields.io/badge/Smithery-calera--labs%2Ficx--mcp-orange.svg)](https://smithery.ai/servers/calera-labs/icx-mcp)
 [![Glama MCP](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp/badge)](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp)
 [![Glama MCP Score](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp/badges/score.svg)](https://glama.ai/mcp/servers/Calera-Labs/icx-mcp)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
