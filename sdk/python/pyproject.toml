@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "calera-agent-memory"
+version = "0.4.0"
+description = "Plug-and-play topological memory substrate for LLMs, LangChain, and autonomous agent swarms."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Calera Labs", email = "support@caleralabs.com" }
+]
+keywords = [
+    "ai-agent",
+    "mcp",
+    "memory",
+    "topological-memory",
+    "langchain",
+    "crewai",
+    "infinite-context"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://icx.caleralabs.com"
+Documentation = "https://icx.caleralabs.com/docs"
+Repository = "https://github.com/Calera-Labs/icx-mcp"

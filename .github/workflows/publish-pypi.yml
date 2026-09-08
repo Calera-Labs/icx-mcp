@@ -1,0 +1,46 @@
+name: Publish calera-agent-memory to PyPI
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  pypi-publish:
+    name: Upload calera-agent-memory to PyPI
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # MANDATORY for PyPI Trusted Publishing (OIDC)
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build & test tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Run unit tests
+        run: |
+          PYTHONPATH=sdk/python python -m unittest discover -s sdk/python/tests
+
+      - name: Build sdist and wheel
+        run: |
+          python -m build sdk/python
+
+      - name: Verify package distributions
+        run: |
+          twine check sdk/python/dist/*
+
+      - name: Publish to PyPI via Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: sdk/python/dist/

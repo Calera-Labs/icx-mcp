@@ -20,3 +20,4 @@ dist/
 coverage/
 .turbo/
 .cache/
+__pycache__/
