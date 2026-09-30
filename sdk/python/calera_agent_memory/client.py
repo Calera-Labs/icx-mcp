@@ -28,7 +28,7 @@ class CaleraMemoryClient:
         data = json.dumps(payload).encode("utf-8")
         headers = {
             "Content-Type": "application/json",
-            "User-Agent": "CaleraAgentMemory-Python/0.4.0",
+            "User-Agent": "CaleraAgentMemory-Python/0.4.1",
         }
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
@@ -72,12 +72,53 @@ class CaleraMemoryClient:
         }
         return self._request("/api/v1/memory/store", payload)
 
-    def query(self, query: str, max_depth: int = 3, vault_id: Optional[str] = None) -> Dict[str, Any]:
-        """Retrieve associative memories from the vault in sub-5ms."""
+    def query(
+        self,
+        query: str,
+        max_depth: int = 3,
+        format: str = "standard",
+        vault_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Retrieve associative memories from the vault in sub-5ms.
+
+        Args:
+            query: Question or concept to recall.
+            max_depth: Maximum transitive walk depth (default: 3).
+            format: Output format ('standard' for JSON facts, 'ribbon' for 1D holographic transition ribbon).
+            vault_id: Optional vault namespace override.
+        """
         v_id = vault_id or self.vault_id or "default_vault"
         payload = {
             "vaultId": v_id,
             "query": query,
             "maxDepth": max_depth,
+            "format": format,
         }
         return self._request("/api/v1/memory/query", payload)
+
+    def query_ribbon(
+        self,
+        query: str,
+        max_depth: int = 3,
+        vault_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Convenience method to retrieve memories formatted as a 1D holographic geodesic ribbon."""
+        return self.query(query=query, max_depth=max_depth, format="ribbon", vault_id=vault_id)
+
+    def geodesic(
+        self,
+        premise: str,
+        target: str,
+        vault_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Calculate continuous stationary-action shortest path across the simplicial complex.
+
+        Returns 1D holographic ribbon serialization (<nav:ribbon>) connecting premise to target.
+        """
+        v_id = vault_id or self.vault_id or "default_vault"
+        payload = {
+            "vaultId": v_id,
+            "premise": premise,
+            "target": target,
+        }
+        return self._request("/v1/lattice/geodesic", payload)

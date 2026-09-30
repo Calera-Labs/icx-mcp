@@ -41,6 +41,42 @@ class TestCaleraMemoryClient(unittest.TestCase):
         self.assertEqual(store_res["status"], "STORED")
 
     @patch("urllib.request.urlopen")
+    def test_query_ribbon_format(self, mock_urlopen):
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps({
+            "status": "OK",
+            "format": "ribbon",
+            "ribbon": '<nav:ribbon premise="AAPL_REV" target="FREE_CASH_FLOW" steps=4 action=5.6600>\nAAPL_REV -> OPERATING_INCOME -> TAX_EXPENSE -> NOPAT -> FREE_CASH_FLOW\n</nav:ribbon>'
+        }).encode("utf-8")
+        mock_response.__enter__.return_value = mock_response
+        mock_urlopen.return_value = mock_response
+
+        client = CaleraMemoryClient(vault_id="vault_u123")
+        res = client.query_ribbon("How does Apple revenue translate to free cash flow?")
+        self.assertEqual(res["format"], "ribbon")
+        self.assertIn("<nav:ribbon", res["ribbon"])
+
+    @patch("urllib.request.urlopen")
+    def test_geodesic_navigation(self, mock_urlopen):
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps({
+            "status": "VERIFIED_GEODESIC",
+            "premise": "AAPL_REV",
+            "target": "FREE_CASH_FLOW",
+            "pathway": ["AAPL_REV", "OPERATING_INCOME", "TAX_EXPENSE", "NOPAT", "FREE_CASH_FLOW"],
+            "stationary_action": 5.66,
+            "ribbon": '<nav:ribbon premise="AAPL_REV" target="FREE_CASH_FLOW" steps=4 action=5.6600>\nAAPL_REV -> OPERATING_INCOME -> TAX_EXPENSE -> NOPAT -> FREE_CASH_FLOW\n</nav:ribbon>'
+        }).encode("utf-8")
+        mock_response.__enter__.return_value = mock_response
+        mock_urlopen.return_value = mock_response
+
+        client = CaleraMemoryClient(vault_id="vault_u123")
+        res = client.geodesic(premise="AAPL_REV", target="FREE_CASH_FLOW")
+        self.assertEqual(res["status"], "VERIFIED_GEODESIC")
+        self.assertEqual(len(res["pathway"]), 5)
+        self.assertIn("steps=4", res["ribbon"])
+
+    @patch("urllib.request.urlopen")
     def test_langchain_adapter(self, mock_urlopen):
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps({

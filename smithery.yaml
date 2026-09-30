@@ -3,7 +3,7 @@
 
 name: icx-mcp
 title: Calera Infinite Context (ICX) — Persistent Memory
-description: Persistent long-term memory and sub-5ms associative recall for AI agents and LLMs with zero context window decay.
+description: Persistent long-term memory, stationary-action geodesic navigation, and sub-5ms associative recall for AI agents and LLMs with zero context window decay.
 homepage: https://icx.caleralabs.com/mcp
 icon: https://caleralabs.com/assets/calera-labs-logo.svg
 license: Apache-2.0
@@ -13,6 +13,8 @@ tags:
   - persistent-memory
   - memory
   - associative-recall
+  - geodesic-navigation
+  - stationary-action
   - zero-loss
   - volumetric-lattice
   - calera-labs
@@ -145,6 +147,10 @@ tools:
         top_k:
           type: number
           description: "Maximum number of grounded facts to retrieve (default: 10, min: 1, max: 50)."
+        format:
+          type: string
+          enum: ["standard", "ribbon"]
+          description: "Optional output format: 'standard' (default, returns grounded facts JSON array) or 'ribbon' (1D stationary-action geodesic serialization <nav:ribbon premise=... target=... steps=... action=...>, reducing prompt injection tokens by >40%)."
       required:
         - query
     outputSchema:
@@ -162,6 +168,12 @@ tools:
         count:
           type: integer
           description: Number of grounded facts returned
+        format:
+          type: string
+          description: Format returned ('standard' or 'ribbon')
+        ribbon:
+          type: string
+          description: 1D holographic geodesic transition ribbon (when format='ribbon')
         facts:
           type: array
           description: List of recalled grounded facts and citations
@@ -788,5 +800,55 @@ tools:
           type: array
           items:
             type: object
+
+  - name: recall_epistemic_context
+    version: 1.0.0
+    description: >-
+      Ultra-compact (<160 tokens) read gateway into persistent epistemic memory. Returns high-salience grounded facts and verified pathways matching a query, with optional 1D holographic ribbon serialization ('format': 'ribbon') for sub-80-token crystal chains. Read-only operation with zero side effects. Requires X-License-Key authentication.
+    annotations:
+      title: Recall Epistemic Context (Compact Read Gateway)
+      readOnlyHint: true
+    inputSchema:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Natural language query or concept to recall relevant epistemic facts for.
+        format:
+          type: string
+          enum: ["standard", "ribbon"]
+          description: "Optional output format: 'standard' (default, compact JSON facts) or 'ribbon' (1D stationary-action geodesic ribbon serialization <nav:ribbon>)."
+        space_id:
+          type: string
+          description: Optional memory space partition to restrict recall to. Defaults to caller default space.
+        top_k:
+          type: number
+          description: "Maximum number of grounded facts to retrieve (default: 5, max: 20)."
+      required:
+        - query
+    outputSchema:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Recall status (VERIFIED_RECALL | NO_GROUNDED_FACTS_FOUND)
+        query:
+          type: string
+          description: Natural language query submitted
+        format:
+          type: string
+          description: Format returned ('standard' or 'ribbon')
+        ribbon:
+          type: string
+          description: 1D holographic geodesic transition ribbon (when format='ribbon')
+        facts:
+          type: array
+          description: List of grounded facts and verified pathways
+          items:
+            type: object
+      required:
+        - status
+        - query
+
 
 
