@@ -7,6 +7,88 @@ import urllib.error
 from typing import Optional, Dict, Any, List
 
 
+class LatticeAPI:
+    """Namespace for 4D topological memory lattice operations."""
+
+    def __init__(self, client: "CaleraMemoryClient"):
+        self._client = client
+
+    def recall(
+        self,
+        query: str,
+        max_depth: int = 2,
+        space_id: Optional[str] = None,
+        target_domain: str = "general",
+    ) -> Dict[str, Any]:
+        """Perform sub-5ms simplicial lattice recall with mathematical boundary refusal (∂² = 0)."""
+        return self._client.query(
+            query=query,
+            max_depth=max_depth,
+            vault_id=space_id,
+            target_domain=target_domain,
+        )
+
+    def store(
+        self,
+        concept: str,
+        association: str,
+        space_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Store structured facts or decisions into the persistent 4D topological lattice."""
+        return self._client.store(
+            concept=concept,
+            association=association,
+            vault_id=space_id,
+        )
+
+    def walk(
+        self,
+        start_node: str,
+        target_node: Optional[str] = None,
+        max_hops: int = 5,
+        space_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Simplicial transitive lattice walk over associative concept manifolds."""
+        payload = {
+            "vaultId": space_id or self._client.vault_id or "default_vault",
+            "startNode": start_node,
+            "targetNode": target_node,
+            "maxHops": max_hops,
+        }
+        return self._client._request("/api/v1/lattice/walk", payload)
+
+
+class SpacesAPI:
+    """Namespace for isolated memory space lifecycle management."""
+
+    def __init__(self, client: "CaleraMemoryClient"):
+        self._client = client
+
+    def create(
+        self,
+        name: str,
+        description: str = "",
+    ) -> Dict[str, Any]:
+        """Create or bind to an isolated, encrypted memory space."""
+        payload = {
+            "name": name,
+            "space_id": name,
+            "description": description,
+        }
+        res = self._client._request("/v1/memory/spaces", payload)
+        if isinstance(res, dict) and "space_id" in res:
+            self._client.vault_id = res["space_id"]
+        elif isinstance(res, dict) and "id" in res:
+            self._client.vault_id = res["id"]
+        else:
+            self._client.vault_id = name
+        return res if isinstance(res, dict) else {"space_id": name, "status": "CREATED"}
+
+    def list(self) -> Dict[str, Any]:
+        """List active memory spaces for the authenticated tenant."""
+        return self._client._request("/v1/memory/spaces", {})
+
+
 class CaleraMemoryClient:
     """Client for the Calera ICX 4D Topological Memory Substrate."""
 
@@ -17,10 +99,12 @@ class CaleraMemoryClient:
         base_url: str = "https://vln-icx-api.caleralabs.com",
         timeout: float = 10.0,
     ):
-        self.api_key = api_key or os.environ.get("CALERA_API_KEY")
-        self.vault_id = vault_id or os.environ.get("CALERA_VAULT_ID")
+        self.api_key = api_key or os.environ.get("CALERA_API_KEY") or os.environ.get("ICX_API_KEY")
+        self.vault_id = vault_id or os.environ.get("CALERA_VAULT_ID") or os.environ.get("ICX_SPACE_ID")
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.lattice = LatticeAPI(self)
+        self.spaces = SpacesAPI(self)
 
     def _request(self, path: str, payload: Dict[str, Any]) -> Dict[str, Any]:
         """Perform a JSON HTTP POST request with proper authentication."""
@@ -78,6 +162,7 @@ class CaleraMemoryClient:
         max_depth: int = 3,
         format: str = "standard",
         vault_id: Optional[str] = None,
+        target_domain: str = "general",
     ) -> Dict[str, Any]:
         """Retrieve associative memories from the vault in sub-5ms.
 
@@ -86,6 +171,7 @@ class CaleraMemoryClient:
             max_depth: Maximum transitive walk depth (default: 3).
             format: Output format ('standard' for JSON facts, 'ribbon' for 1D holographic transition ribbon).
             vault_id: Optional vault namespace override.
+            target_domain: Subspace domain filter ('general', 'finsec', 'icx').
         """
         v_id = vault_id or self.vault_id or "default_vault"
         payload = {
@@ -93,6 +179,7 @@ class CaleraMemoryClient:
             "query": query,
             "maxDepth": max_depth,
             "format": format,
+            "targetDomain": target_domain,
         }
         return self._request("/api/v1/memory/query", payload)
 
@@ -122,3 +209,7 @@ class CaleraMemoryClient:
             "target": target,
         }
         return self._request("/v1/lattice/geodesic", payload)
+
+
+# Canonical alias for streamlined developer ergonomics
+CaleraClient = CaleraMemoryClient
