@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.Calera-Labs/icx-mcp",
-  "title": "Calera Infinite Context (ICX) — Persistent Memory & Associative Recall",
-  "description": "Persistent epistemic memory, stationary-action geodesic navigation, sub-1ms A4 simplicial transitive graph walking, sub-100µs WASM execution, and multi-agent swarm state on the Volumetric Lattice Network.",
+  "title": "Calera Infinite Context (ICX) \u2014 Persistent Memory & Associative Recall",
+  "description": "Sub-5ms topological 4D associative memory coprocessor for LLMs and multi-agent swarms.",
   "repository": {
     "url": "https://github.com/Calera-Labs/icx-mcp",
     "source": "github"
